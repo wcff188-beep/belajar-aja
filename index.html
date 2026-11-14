@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AkuntanPro X — Portal Belajar Interaktif Akuntansi SMK Kelas 10</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            },
+            accent: {
+              500: '#6366f1',
+              600: '#4f46e5',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.3);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.5);
+    }
+    .bento-card {
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .bento-card:hover {
+      transform: translateY(-2px);
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-view {
+      animation: fadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-[#0B0F19] dark:text-slate-100 antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- Mobile Sidebar Backdrop -->
+  <div id="sidebarBackdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+
+  <div class="flex min-h-screen">
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-50 h-screen w-72 bg-white/90 dark:bg-[#111827]/95 backdrop-blur-xl border-r border-slate-200/80 dark:border-slate-800/80 flex flex-col justify-between transition-transform duration-300 -translate-x-full lg:translate-x-0">
+      <div>
+        <!-- Logo Header -->
+        <div class="h-16 px-6 flex items-center justify-between border-b border-slate-200/70 dark:border-slate-800/70">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/25">
+              <i data-lucide="calculator" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <span class="font-extrabold text-base tracking-tight block leading-none">Akuntan<span class="text-emerald-500">Pro</span></span>
+              <span class="text-[11px] font-medium text-slate-500 dark:text-slate-400">SMK Kelas X • Fase E</span>
+            </div>
+          </div>
+          <button onclick="toggleSidebar()" class="lg:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Progress Card in Sidebar -->
+        <div class="p-4">
+          <div class="p-3.5 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200/60 dark:from-slate-800/70 dark:to-slate-900 border border-slate-200/80 dark:border-slate-700/60">
+            <div class="flex items-center justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-600 dark:text-slate-300">Progres Belajar</span>
+              <span id="sidebarProgressText" class="font-mono text-emerald-600 dark:text-emerald-400">0/8 Bab</span>
+            </div>
+            <div class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+              <div id="sidebarProgressBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <div class="mt-2.5 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+              <span class="flex items-center gap-1"><i data-lucide="zap" class="w-3.5 h-3.5 text-amber-500"></i> <span id="xpBadge" class="font-mono font-bold text-slate-700 dark:text-slate-200">0 XP</span></span>
+              <span>Kurikulum Merdeka</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Navigation -->
+        <nav class="px-3 space-y-1">
+          <p class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">Menu Utama</p>
+          
+          <button onclick="switchTab('materi')" id="nav-materi" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+            <span>Materi Lengkap (8 Bab)</span>
+          </button>
+
+          <button onclick="switchTab('simulator')" id="nav-simulator" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all">
+            <i data-lucide="scale" class="w-4 h-4"></i>
+            <span>Lab Persamaan Dasar</span>
+          </button>
+
+          <button onclick="switchTab('drill')" id="nav-drill" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all">
+            <i data-lucide="swords" class="w-4 h-4"></i>
+            <span>Arena Debit & Kredit</span>
+          </button>
+
+          <button onclick="switchTab('quiz')" id="nav-quiz" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all">
+            <i data-lucide="award" class="w-4 h-4"></i>
+            <span>Try Out Akhir Fase E</span>
+          </button>
+        </nav>
+
+        <!-- Quick Chapter Jump -->
+        <div class="px-3 mt-6">
+          <p class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">Daftar Bab Kelas X</p>
+          <div id="sidebarChapterList" class="space-y-1 max-h-[34vh] overflow-y-auto pr-1">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Info -->
+      <div class="p-4 border-t border-slate-200/70 dark:border-slate-800/70 text-xs text-slate-500 dark:text-slate-400 flex items-center justify-between">
+        <span>AKL • Fase E</span>
+        <button onclick="resetProgress()" class="text-rose-500 hover:underline font-medium">Reset Progres</button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="flex-1 flex flex-col min-w-0">
+      <!-- Top Navbar -->
+      <header class="sticky top-0 z-30 h-16 bg-white/80 dark:bg-[#0B0F19]/80 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80 px-4 lg:px-8 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+          <div>
+            <h1 id="headerTitle" class="font-bold text-base sm:text-lg tracking-tight">Dasar-Dasar Akuntansi & Keuangan Lembaga</h1>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5">
+          <div class="relative hidden sm:block">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="searchInput" oninput="filterChapters(this.value)" placeholder="Cari topik (mis. Jurnal, COA)..." class="pl-9 pr-4 py-1.5 text-sm rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-transparent focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 outline-none w-56 lg:w-64 transition-all" />
+          </div>
+
+          <button onclick="toggleTheme()" title="Ganti Tema Terang/Gelap" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors">
+            <i id="themeIcon" data-lucide="sun" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- DYNAMIC CONTENT VIEWS -->
+      <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+
+        <!-- VIEW 1: MATERI LENGKAP -->
+        <section id="view-materi" class="animate-view space-y-6">
+          <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-950 text-white p-6 sm:p-8 border border-slate-700/60 shadow-xl">
+            <div class="relative z-10 max-w-2xl">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold mb-3">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Kurikulum Merdeka • Fase E (Kelas X SMK)
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-2">Kuasai Pondasi Akuntansi Modern dari Nol</h2>
+              <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-5">
+                Pelajari seluruh 8 bab materi inti Akuntansi dan Keuangan Lembaga, lengkap dengan tabel saldo normal, rumus persamaan dasar, simulasi transaksi, dan kuis evaluasi.
+              </p>
+              <div class="flex flex-wrap gap-3">
+                <button onclick="switchTab('simulator')" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-500/20">
+                  <i data-lucide="play" class="w-4 h-4"></i> Coba Simulasi Transaksi
+                </button>
+                <button onclick="switchTab('drill')" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-semibold text-sm flex items-center gap-2 transition-all">
+                  <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i> Latihan Cepat Debit/Kredit
+                </button>
+              </div>
+            </div>
+            <div class="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 flex-col gap-3 opacity-90">
+              <div class="px-4 py-3 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 font-mono text-xs">
+                <span class="text-slate-400 block">Persamaan Dasar</span>
+                <span class="text-emerald-400 font-bold text-sm">Aset = Liabilitas + Ekuitas</span>
+              </div>
+              <div class="px-4 py-3 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 font-mono text-xs">
+                <span class="text-slate-400 block">Saldo Normal</span>
+                <span class="text-indigo-300 font-bold text-sm">Harta & Beban → DEBIT</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sm:hidden">
+            <input type="text" oninput="filterChapters(this.value)" placeholder="Cari bab atau kata kunci..." class="w-full px-4 py-2.5 text-sm rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 outline-none focus:border-emerald-500" />
+          </div>
+
+          <div id="chaptersGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Rendered by JS -->
+          </div>
+
+          <div id="chapterReader" class="hidden rounded-3xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- VIEW 2: SIMULATOR PERSAMAAN DASAR -->
+        <section id="view-simulator" class="hidden animate-view space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-500">Laboratorium Interaktif</span>
+              <h2 class="text-2xl font-extrabold tracking-tight">Simulator Persamaan Dasar Akuntansi</h2>
+              <p class="text-sm text-slate-500 dark:text-slate-400">Klik contoh transaksi di bawah atau input transaksi baru untuk melihat dampak langsung ke neraca.</p>
+            </div>
+            <button onclick="resetSimulator()" class="self-start sm:self-auto px-4 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/20 text-sm font-semibold flex items-center gap-2 transition-all">
+              <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset Saldo
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Total Aset (Harta)</span>
+                <span class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-500"><i data-lucide="wallet" class="w-4 h-4"></i></span>
+              </div>
+              <div id="simTotalAset" class="text-2xl font-extrabold font-mono tabular-nums text-emerald-600 dark:text-emerald-400">Rp 0</div>
+              <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-2 text-xs">
+                <div><span class="text-slate-400">Kas:</span> <span id="valKas" class="font-mono font-semibold">Rp 0</span></div>
+                <div><span class="text-slate-400">Piutang:</span> <span id="valPiutang" class="font-mono font-semibold">Rp 0</span></div>
+                <div><span class="text-slate-400">Perlengkapan:</span> <span id="valPerlengkapan" class="font-mono font-semibold">Rp 0</span></div>
+                <div><span class="text-slate-400">Peralatan:</span> <span id="valPeralatan" class="font-mono font-semibold">Rp 0</span></div>
+              </div>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Liabilitas + Ekuitas</span>
+                <span class="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-500"><i data-lucide="landmark" class="w-4 h-4"></i></span>
+              </div>
+              <div id="simTotalPasiva" class="text-2xl font-extrabold font-mono tabular-nums text-indigo-600 dark:text-indigo-400">Rp 0</div>
+              <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-2 text-xs">
+                <div><span class="text-slate-400">Utang Usaha:</span> <span id="valUtang" class="font-mono font-semibold">Rp 0</span></div>
+                <div><span class="text-slate-400">Modal Pemilik:</span> <span id="valModal" class="font-mono font-semibold">Rp 0</span></div>
+              </div>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-500/5 border border-emerald-500/30 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Status Neraca</span>
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 text-xs font-extrabold">BALANCE</span>
+              </div>
+              <div class="my-2">
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">Aset = Liabilitas + Ekuitas</p>
+                <p id="simEquationCheck" class="text-sm font-bold font-mono mt-1">Rp 0 = Rp 0 + Rp 0</p>
+              </div>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">Setiap transaksi selalu memengaruhi minimal 2 akun secara seimbang (Double-Entry).</p>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800">
+            <h3 class="text-sm font-bold mb-3 flex items-center gap-2">
+              <i data-lucide="mouse-pointer-click" class="w-4 h-4 text-emerald-500"></i>
+              Pilih Simulasi Transaksi Perusahaan Jasa ("Studio Desain Kreatif")
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+              <button onclick="applySimTx('Setoran modal awal pemilik tunai', 50000000, 0, 0, 0, 0, 50000000, 'Kas (+) & Modal (+)')" class="text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 bg-slate-50/50 dark:bg-slate-800/40 transition-all group">
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 block group-hover:translate-x-0.5 transition-transform">+ Setor Modal Awal</span>
+                <span class="text-xs text-slate-600 dark:text-slate-300">Pemilik menyetor uang tunai Rp 50.000.000</span>
+              </button>
+
+              <button onclick="applySimTx('Beli peralatan komputer secara kredit', 0, 0, 0, 15000000, 15000000, 0, 'Peralatan (+) & Utang Usaha (+)')" class="text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 bg-slate-50/50 dark:bg-slate-800/40 transition-all group">
+                <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 block group-hover:translate-x-0.5 transition-transform">+ Beli Peralatan Kredit</span>
+                <span class="text-xs text-slate-600 dark:text-slate-300">Beli PC & tablet grafis Rp 15.000.000 kredit</span>
+              </button>
+
+              <button onclick="applySimTx('Beli perlengkapan kantor tunai', -3000000, 0, 3000000, 0, 0, 0, 'Perlengkapan (+) & Kas (-)')" class="text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 bg-slate-50/50 dark:bg-slate-800/40 transition-all group">
+                <span class="text-xs font-bold text-amber-600 dark:text-amber-400 block group-hover:translate-x-0.5 transition-transform">± Beli Perlengkapan Tunai</span>
+                <span class="text-xs text-slate-600 dark:text-slate-300">Beli kertas & tinta Rp 3.000.000 tunai</span>
+              </button>
+
+              <button onclick="applySimTx('Terima pendapatan jasa desain tunai', 8500000, 0, 0, 0, 0, 8500000, 'Kas (+) & Modal/Pendapatan (+)')" class="text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 bg-slate-50/50 dark:bg-slate-800/40 transition-all group">
+                <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 block group-hover:translate-x-0.5 transition-transform">+ Terima Pendapatan Tunai</span>
+                <span class="text-xs text-slate-600 dark:text-slate-300">Selesaikan proyek logo klien Rp 8.500.000</span>
+              </button>
+
+              <button onclick="applySimTx('Selesaikan jasa desain (pembayaran bulan depan)', 0, 6000000, 0, 0, 0, 6000000, 'Piutang Usaha (+) & Modal/Pendapatan (+)')" class="text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 bg-slate-50/50 dark:bg-slate-800/40 transition-all group">
+                <span class="text-xs font-bold text-cyan-600 dark:text-cyan-400 block group-hover:translate-x-0.5 transition-transform">+ Pendapatan Kredit (Piutang)</span>
+                <span class="text-xs text-slate-600 dark:text-slate-300">Tagihan proyek Rp 6.000.000 belum dibayar</span>
+              </button>
+
+              <button onclick="applySimTx('Bayar beban listrik, internet & sewa', -2500000, 0, 0, 0, 0, -2500000, 'Kas (-) & Modal/Beban (-)')" class="text-left p-3 rounded-xl border border-slate-200 dark:border-slate-700/80 hover:border-emerald-500 bg-slate-50/50 dark:bg-slate-800/40 transition-all group">
+                <span class="text-xs font-bold text-rose-600 dark:text-rose-400 block group-hover:translate-x-0.5 transition-transform">- Bayar Beban Operasional</span>
+                <span class="text-xs text-slate-600 dark:text-slate-300">Bayar tagihan utilitas Rp 2.500.000 tunai</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+              <h3 class="font-bold text-sm">Tabel Riwayat Persamaan Dasar Akuntansi</h3>
+              <span id="txCountBadge" class="text-xs font-mono px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800">0 Transaksi</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left">
+                <thead class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-semibold uppercase">
+                  <tr>
+                    <th class="px-4 py-3">Keterangan Transaksi</th>
+                    <th class="px-4 py-3 text-right">Kas</th>
+                    <th class="px-4 py-3 text-right">Piutang</th>
+                    <th class="px-4 py-3 text-right">Perlengkapan</th>
+                    <th class="px-4 py-3 text-right">Peralatan</th>
+                    <th class="px-4 py-3 text-right">Utang Usaha</th>
+                    <th class="px-4 py-3 text-right">Modal</th>
+                    <th class="px-4 py-3">Analisis</th>
+                  </tr>
+                </thead>
+                <tbody id="simTableBody" class="divide-y divide-slate-100 dark:divide-slate-800/80 font-mono tabular-nums">
+                  <tr>
+                    <td colspan="8" class="px-4 py-8 text-center font-sans text-slate-400">Belum ada transaksi. Klik tombol simulasi di atas untuk memulai!</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 3: ARENA LATIHAN DEBIT & KREDIT -->
+        <section id="view-drill" class="hidden animate-view max-w-3xl mx-auto space-y-6">
+          <div class="text-center space-y-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-bold">
+              <i data-lucide="flame" class="w-3.5 h-3.5"></i> Refleks Saldo Normal Akun
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Arena Debit atau Kredit?</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Tentukan posisi pencatatan yang benar untuk setiap perubahan akun di bawah ini!</p>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+            <div class="p-4 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 text-center">
+              <span class="text-xs text-slate-400 block">Skor Benar</span>
+              <span id="drillScore" class="text-xl font-extrabold font-mono text-emerald-500">0</span>
+            </div>
+            <div class="p-4 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 text-center">
+              <span class="text-xs text-slate-400 block">Streak Beruntun</span>
+              <span id="drillStreak" class="text-xl font-extrabold font-mono text-amber-500">0 🔥</span>
+            </div>
+            <div class="p-4 rounded-2xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 text-center">
+              <span class="text-xs text-slate-400 block">Soal</span>
+              <span id="drillCounter" class="text-xl font-extrabold font-mono">1 / 12</span>
+            </div>
+          </div>
+
+          <div class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-xl text-center space-y-6">
+            <div class="space-y-2">
+              <span id="drillCategory" class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">Kategori: Aset</span>
+              <h3 id="drillQuestion" class="text-xl sm:text-2xl font-extrabold pt-2">Kas Perusahaan Bertambah (+)</h3>
+              <p id="drillContext" class="text-sm text-slate-500 dark:text-slate-400">Contoh: Menerima pelunasan piutang dari pelanggan secara tunai.</p>
+            </div>
+
+            <div id="drillButtons" class="grid grid-cols-2 gap-4 pt-2">
+              <button onclick="answerDrill('DEBIT')" class="py-4 px-6 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500 text-emerald-600 dark:text-emerald-400 hover:text-slate-950 border-2 border-emerald-500/30 hover:border-emerald-500 font-extrabold text-lg transition-all">
+                DEBIT (D)
+              </button>
+              <button onclick="answerDrill('KREDIT')" class="py-4 px-6 rounded-2xl bg-indigo-500/10 hover:bg-indigo-500 text-indigo-600 dark:text-indigo-400 hover:text-white border-2 border-indigo-500/30 hover:border-indigo-500 font-extrabold text-lg transition-all">
+                KREDIT (K)
+              </button>
+            </div>
+
+            <div id="drillFeedback" class="hidden p-4 rounded-2xl text-left text-sm space-y-2">
+              <p id="drillFeedbackTitle" class="font-bold"></p>
+              <p id="drillFeedbackDesc" class="text-xs leading-relaxed opacity-90"></p>
+              <button onclick="nextDrill()" class="mt-2 px-4 py-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xs font-bold">
+                Soal Berikutnya →
+              </button>
+            </div>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-100/80 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 text-xs">
+            <p class="font-bold mb-2 text-slate-700 dark:text-slate-200">💡 Rumus Cepat Jari Akuntansi (Saldo Normal):</p>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 font-mono">
+              <div class="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700"><span class="text-emerald-500 font-bold">Harta</span>: +D / -K</div>
+              <div class="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700"><span class="text-indigo-500 font-bold">Utang</span>: -D / +K</div>
+              <div class="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700"><span class="text-indigo-500 font-bold">Modal</span>: -D / +K</div>
+              <div class="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700"><span class="text-indigo-500 font-bold">Pendapatan</span>: -D / +K</div>
+              <div class="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700"><span class="text-emerald-500 font-bold">Beban</span>: +D / -K</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VIEW 4: TRY OUT AKHIR FASE E -->
+        <section id="view-quiz" class="hidden animate-view max-w-3xl mx-auto space-y-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-500">Evaluasi Komprehensif</span>
+              <h2 class="text-2xl font-extrabold tracking-tight">Try Out Akuntansi SMK Kelas 10</h2>
+            </div>
+            <span id="quizProgressPill" class="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold">Soal 1 dari 10</span>
+          </div>
+
+          <div id="quizContainer" class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+            <!-- Rendered by JS -->
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const chaptersData = [
+      {
+        id: 1,
+        code: "BAB 01",
+        title: "Proses Bisnis di Bidang Akuntansi dan Keuangan Lembaga",
+        tag: "Fondasi Bisnis",
+        icon: "building-2",
+        summary: "Memahami alur proses bisnis perusahaan jasa, dagang, dan manufaktur serta peran krusial akuntansi dalam pengambilan keputusan.",
+        content: `
+          <div class="space-y-4">
+            <p class="leading-relaxed"><strong>Proses bisnis</strong> adalah sekumpulan aktivitas atau pekerjaan terstruktur yang saling terkait untuk menghasilkan produk atau layanan tertentu bagi pelanggan. Dalam akuntansi, setiap aktivitas bisnis yang bernilai uang disebut <em>transaksi keuangan</em>.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4">
+              <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <h4 class="font-bold text-emerald-600 dark:text-emerald-400 text-sm mb-1">1. Perusahaan Jasa</h4>
+                <p class="text-xs text-slate-600 dark:text-slate-300">Menjual layanan keahlian/fasilitas tanpa wujud fisik. Contoh: Bengkel, Kantor Akuntan, Salon, Ekspedisi.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <h4 class="font-bold text-indigo-600 dark:text-indigo-400 text-sm mb-1">2. Perusahaan Dagang</h4>
+                <p class="text-xs text-slate-600 dark:text-slate-300">Membeli barang jadi lalu menjualnya kembali tanpa mengubah bentuk fisik. Contoh: Minimarket, Distributor.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <h4 class="font-bold text-amber-600 dark:text-amber-400 text-sm mb-1">3. Perusahaan Manufaktur</h4>
+                <p class="text-xs text-slate-600 dark:text-slate-300">Mengolah bahan baku menjadi barang jadi siap jual melalui proses produksi. Contoh: Pabrik Tekstil, Industri Makanan.</p>
+              </div>
+            </div>
+
+            <h4 class="font-bold text-base">Pihak Pengguna Informasi Akuntansi</h4>
+            <ul class="list-disc pl-5 space-y-1.5 text-sm">
+              <li><strong>Pihak Internal:</strong> Manajer, Direktur, dan Kepala Bagian (untuk menyusun anggaran, mengevaluasi kinerja, dan menentukan harga jual).</li>
+              <li><strong>Pihak Eksternal:</strong> Investor (menilai prospek dividen), Kreditor/Bank (menilai kelayakan kredit), Pemerintah/Ditjen Pajak (menghitung pajak terutang), dan Karyawan.</li>
+            </ul>
+          </div>
+        `,
+        miniCheck: {
+          q: "Perusahaan yang membeli barang jadi kemudian menjualnya kembali tanpa mengubah bentuk fisiknya disebut...",
+          options: ["Perusahaan Jasa", "Perusahaan Dagang", "Perusahaan Manufaktur", "Perusahaan Ekstraktif"],
+          answer: 1
+        }
+      },
+      {
+        id: 2,
+        code: "BAB 02",
+        title: "Perkembangan Teknologi & Isu Global Dunia Akuntansi",
+        tag: "Era Digital & AI",
+        icon: "cpu",
+        summary: "Transformasi pencatatan manual menuju Cloud Accounting, ERP, Big Data, AI, serta isu Green Accounting.",
+        content: `
+          <div class="space-y-4">
+            <p class="leading-relaxed">Perkembangan Revolusi Industri 4.0 dan Society 5.0 menggeser peran akuntan dari sekadar juru catat (<em>bookkeeper</em>) menjadi analis data strategis berbasis teknologi.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/20">
+                <h4 class="font-bold text-sm text-emerald-600 dark:text-emerald-400">Cloud Accounting & Software</h4>
+                <p class="text-xs mt-1">Aplikasi seperti <strong>Accurate Online, Zahir, Jurnal.id, dan MYOB</strong> memungkinkan pembuatan jurnal hingga laporan keuangan secara otomatis dan <em>real-time</em>.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/20">
+                <h4 class="font-bold text-sm text-indigo-600 dark:text-indigo-400">Enterprise Resource Planning (ERP)</h4>
+                <p class="text-xs mt-1">Sistem terpadu (seperti SAP dan Odoo) yang menghubungkan divisi gudang, penjualan, HRD, dan keuangan dalam satu basis data.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/20">
+                <h4 class="font-bold text-sm text-amber-600 dark:text-amber-400">Artificial Intelligence & Big Data</h4>
+                <p class="text-xs mt-1">AI membantu mendeteksi anomali transaksi (<em>fraud detection</em>) dan otomatisasi pemindaian faktur (OCR).</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-teal-500/5 border border-teal-500/20">
+                <h4 class="font-bold text-sm text-teal-600 dark:text-teal-400">Green Accounting (Akuntansi Lingkungan)</h4>
+                <p class="text-xs mt-1">Pencatatan biaya pencegahan limbah dan dampak lingkungan dalam laporan keberlanjutan (<em>Sustainability Report</em>).</p>
+              </div>
+            </div>
+          </div>
+        `,
+        miniCheck: {
+          q: "Sistem perangkat lunak terpadu yang mengintegrasikan seluruh departemen perusahaan (keuangan, gudang, produksi) dalam satu database disebut...",
+          options: ["OCR", "ERP (Enterprise Resource Planning)", "Spreadsheet Manual", "Point of Sale"],
+          answer: 1
+        }
+      },
+      {
+        id: 3,
+        code: "BAB 03",
+        title: "Profesi Akuntansi dan Etika Profesi",
+        tag: "Karier & Etika",
+        icon: "shield-check",
+        summary: "Mengenal jenjang karier lulusan AKL, jenis-jenis profesi akuntan, dan 5 prinsip dasar kode etik akuntan.",
+        content: `
+          <div class="space-y-4">
+            <h4 class="font-bold text-base">Jenis Profesi Akuntan</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <strong class="text-emerald-500 block text-sm mb-1">1. Akuntan Internal (Manajemen)</strong>
+                Bekerja tetap di dalam satu perusahaan tertentu (contoh: Staf Akunting, Internal Auditor, Manajer Keuangan).
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <strong class="text-indigo-500 block text-sm mb-1">2. Akuntan Publik (CPA)</strong>
+                Akuntan independen yang membuka Kantor Akuntan Publik (KAP) untuk memberikan jasa audit laporan keuangan dan konsultasi pajak.
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <strong class="text-amber-500 block text-sm mb-1">3. Akuntan Pemerintah</strong>
+                Bekerja di lembaga negara seperti BPK, BPKP, Kementerian Keuangan, atau Ditjen Pajak.
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <strong class="text-rose-500 block text-sm mb-1">4. Akuntan Pendidik</strong>
+                Bertugas mengajar, menyusun kurikulum, dan meneliti ilmu akuntansi (Guru SMK Akuntansi & Dosen).
+              </div>
+            </div>
+
+            <h4 class="font-bold text-base pt-2">5 Prinsip Dasar Etika Profesi Akuntan (IAI)</h4>
+            <ol class="list-decimal pl-5 space-y-1 text-sm">
+              <li><strong>Integritas:</strong> Bersikap lugas, jujur, dan tidak memanipulasi angka laporan.</li>
+              <li><strong>Objektivitas:</strong> Tidak membiarkan bias, benturan kepentingan, atau pengaruh pihak lain mengganggu pertimbangan profesional.</li>
+              <li><strong>Kompetensi & Kehati-hatian Profesional:</strong> Terus memperbarui pengetahuan SAK dan peraturan perpajakan.</li>
+              <li><strong>Kerahasiaan:</strong> Menjaga informasi keuangan klien/perusahaan agar tidak bocor ke pihak tak berwenang.</li>
+              <li><strong>Perilaku Profesional:</strong> Mematuhi hukum dan menjauhi tindakan yang mendiskreditkan profesi.</li>
+            </ol>
+          </div>
+        `,
+        miniCheck: {
+          q: "Seorang akuntan menolak menyebarkan data gaji karyawan dan rahasia laba perusahaan kepada kompetitor. Prinsip etika yang diterapkan adalah...",
+          options: ["Objektivitas", "Kerahasiaan", "Kompetensi", "Integritas"],
+          answer: 1
+        }
+      },
+      {
+        id: 4,
+        code: "BAB 04",
+        title: "Prinsip Dasar Akuntansi dan Konsep Dasar",
+        tag: "Standar SAK",
+        icon: "book-marked",
+        summary: "Asumsi dasar akuntansi (Entitas Ekonomi, Kelangsungan Usaha, Dasar Akrual) dan karakteristik kualitas laporan keuangan.",
+        content: `
+          <div class="space-y-4">
+            <p class="leading-relaxed">Agar laporan keuangan dapat dibandingkan dan dipercaya secara nasional maupun global, penyusunannya berpedoman pada <strong>SAK (Standar Akuntansi Keuangan)</strong> yang disusun oleh Ikatan Akuntan Indonesia (IAI).</p>
+            <div class="space-y-2.5 text-sm">
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border-l-4 border-emerald-500">
+                <strong>1. Konsep Entitas Ekonomi (Business Entity):</strong> Harta perusahaan wajib dipisahkan secara tegas dari harta pribadi pemiliknya.
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border-l-4 border-indigo-500">
+                <strong>2. Dasar Akrual (Accrual Basis):</strong> Transaksi dicatat pada saat terjadinya peristiwa ekonomi, bukan semata-mata saat kas diterima atau dibayarkan.
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border-l-4 border-amber-500">
+                <strong>3. Kelangsungan Usaha (Going Concern):</strong> Perusahaan diasumsikan akan terus beroperasi di masa depan dan tidak akan dilikuidasi dalam waktu dekat.
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border-l-4 border-rose-500">
+                <strong>4. Prinsip Biaya Historis (Historical Cost):</strong> Aset dicatat berdasarkan harga perolehan saat transaksi pembelian terjadi.
+              </div>
+            </div>
+          </div>
+        `,
+        miniCheck: {
+          q: "Pemilik bengkel mengambil uang kas perusahaan untuk membayar uang sekolah anaknya. Pencatatan terpisah atas transaksi ini sesuai dengan konsep...",
+          options: ["Going Concern", "Business Entity (Entitas Ekonomi)", "Matching Principle", "Consistency"],
+          answer: 1
+        }
+      },
+      {
+        id: 5,
+        code: "BAB 05",
+        title: "Persamaan Dasar Akuntansi",
+        tag: "Inti Hitungan",
+        icon: "equal",
+        summary: "Hubungan matematis antara Aset, Liabilitas, dan Ekuitas serta pengaruh transaksi keuangan terhadap keseimbangan neraca.",
+        content: `
+          <div class="space-y-4">
+            <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-500/15 to-teal-500/10 border border-emerald-500/30 text-center font-mono">
+              <span class="text-xs uppercase tracking-widest text-emerald-600 dark:text-emerald-400 block mb-1">Rumus Mutlak Akuntansi</span>
+              <span class="text-lg sm:text-xl font-extrabold">ASET = LIABILITAS + EKUITAS</span>
+            </div>
+
+            <ul class="space-y-2 text-sm">
+              <li><strong>Aset (Harta):</strong> Sumber daya ekonomi yang dikuasai perusahaan (Kas, Piutang Usaha, Perlengkapan, Sewa Dibayar di Muka, Peralatan, Tanah, Gedung).</li>
+              <li><strong>Liabilitas (Utang):</strong> Kewajiban perusahaan kepada pihak lain yang harus dilunasi di masa depan (Utang Usaha, Utang Bank, Utang Gaji).</li>
+              <li><strong>Ekuitas (Modal):</strong> Hak residual pemilik atas aset perusahaan setelah dikurangi seluruh liabilitas.</li>
+            </ul>
+
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs space-y-1.5">
+              <p class="font-bold text-sm">4 Faktor yang Memengaruhi Ekuitas:</p>
+              <p>✅ <strong>Investasi Pemilik (+)</strong>: Menambah Modal</p>
+              <p>✅ <strong>Pendapatan (+)</strong>: Menambah Modal</p>
+              <p>❌ <strong>Beban (-)</strong>: Mengurangi Modal</p>
+              <p>❌ <strong>Prive / Penarikan Pribadi (-)</strong>: Mengurangi Modal</p>
+            </div>
+          </div>
+        `,
+        miniCheck: {
+          q: "Diketahui total Aset sebesar Rp85.000.000 dan total Liabilitas sebesar Rp32.500.000. Berapakah besar Ekuitas perusahaan?",
+          options: ["Rp117.500.000", "Rp52.500.000", "Rp53.500.000", "Rp42.500.000"],
+          answer: 1
+        }
+      },
+      {
+        id: 6,
+        code: "BAB 06",
+        title: "Mekanisme Debit, Kredit, dan Saldo Normal Akun",
+        tag: "Wajib Hafal",
+        icon: "arrow-left-right",
+        summary: "Aturan pencatatan berpasangan (Double-Entry), pengkodean akun (Chart of Accounts), dan tabel saldo normal 5 kelompok akun.",
+        content: `
+          <div class="space-y-4">
+            <p class="text-sm leading-relaxed">Dalam sistem pembukuan berpasangan (<em>Double-Entry Bookkeeping</em>), <strong>Debit</strong> berarti sisi kiri akun dan <strong>Kredit</strong> berarti sisi kanan akun. Total nominal Debit harus selalu sama dengan total Kredit.</p>
+            
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-700">
+              <table class="w-full text-xs text-left">
+                <thead class="bg-slate-100 dark:bg-slate-800 font-bold uppercase">
+                  <tr>
+                    <th class="px-4 py-3">Kode</th>
+                    <th class="px-4 py-3">Kelompok Akun</th>
+                    <th class="px-4 py-3">Bertambah (+)</th>
+                    <th class="px-4 py-3">Berkurang (-)</th>
+                    <th class="px-4 py-3">Saldo Normal</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700 font-mono">
+                  <tr>
+                    <td class="px-4 py-2.5 font-bold">1</td>
+                    <td class="px-4 py-2.5 font-sans font-semibold">Aset (Harta)</td>
+                    <td class="px-4 py-2.5 text-emerald-500 font-bold">DEBIT</td>
+                    <td class="px-4 py-2.5 text-rose-500">KREDIT</td>
+                    <td class="px-4 py-2.5 font-bold">DEBIT</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-2.5 font-bold">2</td>
+                    <td class="px-4 py-2.5 font-sans font-semibold">Liabilitas (Utang)</td>
+                    <td class="px-4 py-2.5 text-indigo-400 font-bold">KREDIT</td>
+                    <td class="px-4 py-2.5 text-rose-500">DEBIT</td>
+                    <td class="px-4 py-2.5 font-bold">KREDIT</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-2.5 font-bold">3</td>
+                    <td class="px-4 py-2.5 font-sans font-semibold">Ekuitas (Modal)</td>
+                    <td class="px-4 py-2.5 text-indigo-400 font-bold">KREDIT</td>
+                    <td class="px-4 py-2.5 text-rose-500">DEBIT</td>
+                    <td class="px-4 py-2.5 font-bold">KREDIT</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-2.5 font-bold">4</td>
+                    <td class="px-4 py-2.5 font-sans font-semibold">Pendapatan</td>
+                    <td class="px-4 py-2.5 text-indigo-400 font-bold">KREDIT</td>
+                    <td class="px-4 py-2.5 text-rose-500">DEBIT</td>
+                    <td class="px-4 py-2.5 font-bold">KREDIT</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-2.5 font-bold">5</td>
+                    <td class="px-4 py-2.5 font-sans font-semibold">Beban</td>
+                    <td class="px-4 py-2.5 text-emerald-500 font-bold">DEBIT</td>
+                    <td class="px-4 py-2.5 text-rose-500">KREDIT</td>
+                    <td class="px-4 py-2.5 font-bold">DEBIT</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400"><em>Catatan Akun Kontra:</em> Akun <strong>Prive</strong> dan <strong>Akumulasi Penyusutan</strong> bersaldo normal kebalikan dari induknya.</p>
+          </div>
+        `,
+        miniCheck: {
+          q: "Jika perusahaan membayar utang usaha kepada pemasok secara tunai, bagaimanakah pencatatannya?",
+          options: ["Kas (D), Utang Usaha (K)", "Utang Usaha (D), Kas (K)", "Utang Usaha (D), Modal (K)", "Beban Utang (D), Kas (K)"],
+          answer: 1
+        }
+      },
+      {
+        id: 7,
+        code: "BAB 07",
+        title: "Siklus Akuntansi Perusahaan Jasa",
+        tag: "Praktik Utama",
+        icon: "refresh-cw",
+        summary: "Tahapan lengkap dari bukti transaksi, Jurnal Umum, Posting Buku Besar, Neraca Saldo, AJP, hingga Laporan Keuangan.",
+        content: `
+          <div class="space-y-4">
+            <p class="text-sm leading-relaxed">Siklus akuntansi adalah proses berulang dalam satu periode akuntansi (biasanya 1 tahun) untuk menghasilkan laporan keuangan yang akurat:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+              <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-mono font-bold text-emerald-500">Tahap 1:</span> <strong>Analisis Bukti Transaksi</strong> (Kuitansi, Faktur, Nota Kontan).
+              </div>
+              <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-mono font-bold text-emerald-500">Tahap 2:</span> <strong>Jurnal Umum</strong> — Pencatatan kronologis pertama.
+              </div>
+              <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-mono font-bold text-emerald-500">Tahap 3:</span> <strong>Posting ke Buku Besar</strong> — Pengelompokan saldo per akun.
+              </div>
+              <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-mono font-bold text-emerald-500">Tahap 4:</span> <strong>Neraca Saldo</strong> — Uji keseimbangan D = K.
+              </div>
+              <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-mono font-bold text-indigo-500">Tahap 5:</span> <strong>Jurnal Penyesuaian (AJP)</strong>.
+              </div>
+              <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-mono font-bold text-indigo-500">Tahap 6:</span> <strong>Kertas Kerja (Worksheet)</strong>.
+              </div>
+              <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 sm:col-span-2">
+                <span class="font-mono font-bold text-amber-500">Tahap 7 & 8:</span> <strong>Laporan Keuangan & Jurnal Penutup</strong>.
+              </div>
+            </div>
+          </div>
+        `,
+        miniCheck: {
+          q: "Akun-akun berikut yang harus dinolkan saldonya pada akhir periode melalui Jurnal Penutup adalah...",
+          options: ["Kas, Piutang, dan Peralatan", "Utang Usaha dan Modal", "Pendapatan, Beban, dan Prive", "Akumulasi Penyusutan dan Tanah"],
+          answer: 2
+        }
+      },
+      {
+        id: 8,
+        code: "BAB 08",
+        title: "K3 Perkantoran dan Budaya Kerja 5R",
+        tag: "Standar Industri",
+        icon: "hard-hat",
+        summary: "Keselamatan dan Kesehatan Kerja (K3) di ruang administrasi keuangan, ergonomi komputer, serta penerapan 5R.",
+        content: `
+          <div class="space-y-4">
+            <p class="text-sm leading-relaxed">Pekerjaan akuntansi menuntut ketelitian tinggi di depan layar komputer dan pengelolaan arsip fisik. Penerapan <strong>K3 Perkantoran</strong> mencegah kelelahan mata dan gangguan tulang belakang.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <strong class="text-emerald-500 block text-sm mb-1">Ergonomi Kerja Akuntan</strong>
+                Posisi layar sejajar mata (jarak 50–70 cm), punggung tegak bersandar, kaki menapak lantai, dan istirahat mata setiap 20 menit.
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <strong class="text-indigo-500 block text-sm mb-1">Budaya Kerja 5R (5S)</strong>
+                <strong>Ringkas</strong>, <strong>Rapi</strong>, <strong>Resik</strong>, <strong>Rawat</strong>, <strong>Rajin</strong>.
+              </div>
+            </div>
+          </div>
+        `,
+        miniCheck: {
+          q: "Kegiatan memilah bukti transaksi yang masih diperlukan dan menyingkirkan kertas yang tidak terpakai dalam budaya 5R disebut...",
+          options: ["Rapi", "Ringkas", "Resik", "Rawat"],
+          answer: 1
+        }
+      }
+    ];
+
+    const drillData = [
+      { cat: "Aset", q: "Kas Perusahaan Bertambah (+)", ctx: "Menerima pembayaran tunai dari pelanggan atas jasa servis.", ans: "DEBIT", exp: "Kas termasuk kelompok Aset. Saldo normal Aset adalah Debit." },
+      { cat: "Liabilitas", q: "Utang Usaha Bertambah (+)", ctx: "Membeli perlengkapan kantor secara kredit dari toko alat tulis.", ans: "KREDIT", exp: "Utang Usaha adalah Liabilitas yang bertambah di KREDIT." },
+      { cat: "Ekuitas", q: "Modal Pemilik Bertambah (+)", ctx: "Pemilik menyetorkan uang tunai tambahan sebagai investasi ke kas perusahaan.", ans: "KREDIT", exp: "Modal memiliki saldo normal Kredit." },
+      { cat: "Beban", q: "Beban Gaji Karyawan Bertambah (+)", ctx: "Membayar gaji staf administrasi bulan berjalan.", ans: "DEBIT", exp: "Beban memiliki saldo normal Debit." },
+      { cat: "Pendapatan", q: "Pendapatan Jasa Bertambah (+)", ctx: "Menyelesaikan pekerjaan konsultasi keuangan klien.", ans: "KREDIT", exp: "Pendapatan memiliki saldo normal Kredit." },
+      { cat: "Aset", q: "Kas Perusahaan Berkurang (-)", ctx: "Membayar tagihan listrik dan air kantor secara tunai.", ans: "KREDIT", exp: "Kas berkurang dicatat di sisi KREDIT." },
+      { cat: "Liabilitas", q: "Utang Bank Berkurang (-)", ctx: "Membayar cicilan pokok pinjaman ke bank.", ans: "DEBIT", exp: "Utang berkurang dicatat di sisi DEBIT." },
+      { cat: "Aset", q: "Piutang Usaha Bertambah (+)", ctx: "Menyerahkan jasa desain kepada klien, namun pembayaran baru diterima bulan depan.", ans: "DEBIT", exp: "Piutang Usaha adalah Aset yang bertambah di DEBIT." },
+      { cat: "Ekuitas (Kontra)", q: "Prive Pemilik Bertambah (+)", ctx: "Pemilik mengambil uang kas perusahaan untuk keperluan pribadi.", ans: "DEBIT", exp: "Prive bersifat mengurangi ekuitas sehingga bersaldo normal DEBIT." },
+      { cat: "Aset", q: "Peralatan Kantor Bertambah (+)", ctx: "Membeli mesin fotokopi baru untuk operasional kantor.", ans: "DEBIT", exp: "Peralatan adalah Aset Tetap yang bertambah di DEBIT." },
+      { cat: "Aset", q: "Piutang Usaha Berkurang (-)", ctx: "Menerima pelunasan piutang dari debitur.", ans: "KREDIT", exp: "Saat piutang dilunasi, saldo Piutang Usaha berkurang di KREDIT." },
+      { cat: "Aset (Kontra)", q: "Akumulasi Penyusutan Peralatan Bertambah (+)", ctx: "Mencatat jurnal penyesuaian penyusutan aset tetap akhir tahun.", ans: "KREDIT", exp: "Akumulasi Penyusutan adalah akun kontra aset bersaldo normal KREDIT." }
+    ];
+
+    const quizData = [
+      {
+        q: "Berikut ini yang merupakan urutan siklus akuntansi yang benar pada tahap pencatatan dan pengikhtisaran adalah...",
+        options: [
+          "Bukti Transaksi → Buku Besar → Jurnal Umum → Neraca Saldo",
+          "Bukti Transaksi → Jurnal Umum → Buku Besar → Neraca Saldo",
+          "Jurnal Umum → Bukti Transaksi → Neraca Saldo → Buku Besar",
+          "Neraca Saldo → Jurnal Umum → Buku Besar → Laporan Keuangan"
+        ],
+        ans: 1,
+        exp: "Urutan baku siklus akuntansi dimulai dari Analisis Bukti Transaksi, Jurnal Umum, Buku Besar, hingga Neraca Saldo."
+      },
+      {
+        q: "Pada tanggal 5 Oktober, Salon Cantik membeli perlengkapan salon seharga Rp4.000.000. Dibayar tunai Rp1.500.000 dan sisanya dibayar bulan depan. Jurnal umum yang tepat adalah...",
+        options: [
+          "Perlengkapan (D) Rp4.000.000; Kas (K) Rp4.000.000",
+          "Perlengkapan (D) Rp4.000.000; Kas (K) Rp1.500.000; Utang Usaha (K) Rp2.500.000",
+          "Peralatan (D) Rp4.000.000; Kas (K) Rp1.500.000; Piutang Usaha (K) Rp2.500.000",
+          "Kas (D) Rp1.500.000; Utang Usaha (D) Rp2.500.000; Perlengkapan (K) Rp4.000.000"
+        ],
+        ans: 1,
+        exp: "Perlengkapan bertambah (D) Rp4.000.000, Kas berkurang (K) Rp1.500.000, dan Utang Usaha bertambah (K) Rp2.500.000."
+      },
+      {
+        q: "Akun-akun berikut ini semuanya memiliki saldo normal di sisi KREDIT, kecuali...",
+        options: ["Utang Gaji", "Pendapatan Sewa", "Modal Tuan Andi", "Sewa Dibayar di Muka"],
+        ans: 3,
+        exp: "Sewa Dibayar di Muka adalah Aset Lancar sehingga bersaldo normal DEBIT."
+      },
+      {
+        q: "Perusahaan jasa memperoleh Pendapatan Jasa Rp45.000.000, Beban Gaji Rp18.000.000, Beban Sewa Rp6.000.000, dan Prive Rp3.000.000. Berapakah Laba Bersih perusahaan?",
+        options: ["Rp18.000.000", "Rp21.000.000", "Rp24.000.000", "Rp27.000.000"],
+        ans: 1,
+        exp: "Laba Bersih = Pendapatan - Total Beban = Rp45.000.000 - Rp24.000.000 = Rp21.000.000."
+      },
+      {
+        q: "Bukti transaksi internal yang dibuat oleh pimpinan perusahaan kepada bagian akuntansi untuk mencatat penyusutan aset tetap akhir periode disebut...",
+        options: ["Kuitansi", "Nota Kredit", "Memo / Bukti Memorial", "Faktur Penjualan"],
+        ans: 2,
+        exp: "Bukti Memorial adalah bukti internal antarbagian perusahaan."
+      },
+      {
+        q: "Dalam Neraca Saldo tercatat saldo Perlengkapan Rp5.000.000. Pada akhir periode, perlengkapan yang masih tersisa di gudang senilai Rp1.800.000. Jurnal penyesuaiannya adalah...",
+        options: [
+          "Beban Perlengkapan (D) Rp1.800.000; Perlengkapan (K) Rp1.800.000",
+          "Beban Perlengkapan (D) Rp3.200.000; Perlengkapan (K) Rp3.200.000",
+          "Perlengkapan (D) Rp3.200.000; Beban Perlengkapan (K) Rp3.200.000",
+          "Beban Perlengkapan (D) Rp5.000.000; Kas (K) Rp5.000.000"
+        ],
+        ans: 1,
+        exp: "Pemakaian = Rp5.000.000 - Rp1.800.000 = Rp3.200.000 dicatat pada Beban Perlengkapan (D) dan Perlengkapan (K)."
+      },
+      {
+        q: "Laporan keuangan yang menyajikan posisi Aset, Liabilitas, dan Ekuitas perusahaan pada tanggal tertentu secara spesifik disebut...",
+        options: ["Laporan Laba Rugi", "Laporan Perubahan Ekuitas", "Laporan Posisi Keuangan (Neraca)", "Laporan Arus Kas"],
+        ans: 2,
+        exp: "Laporan Posisi Keuangan (Neraca) menyajikan posisi harta, utang, dan modal."
+      },
+      {
+        q: "Prinsip etika profesi akuntan yang mengharuskan akuntan bersikap jujur, terus terang, dan tidak menyembunyikan fakta material adalah...",
+        options: ["Integritas", "Kerahasiaan", "Kompetensi", "Perilaku Profesional"],
+        ans: 0,
+        exp: "Integritas menuntut kejujuran dan ketulusan profesional."
+      }
+    ];
+
+    let completedChapters = JSON.parse(localStorage.getItem('akuntanpro_completed') || '[]');
+    let xpPoints = parseInt(localStorage.getItem('akuntanpro_xp') || '0');
+    let activeChapterId = null;
+
+    let simState = { kas: 0, piutang: 0, perlengkapan: 0, peralatan: 0, utang: 0, modal: 0, logs: [] };
+    let drillIdx = 0, drillScore = 0, drillStreak = 0;
+    let quizIdx = 0, quizAnswers = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderChapters(chaptersData);
+      updateProgressUI();
+      loadDrill(0);
+      renderQuiz();
+      lucide.createIcons();
+    });
+
+    function formatRp(num) {
+      const prefix = num < 0 ? '-Rp ' : 'Rp ';
+      return prefix + Math.abs(num).toLocaleString('id-ID');
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.classList.toggle('dark');
+      const icon = document.getElementById('themeIcon');
+      icon.setAttribute('data-lucide', html.classList.contains('dark') ? 'sun' : 'moon');
+      lucide.createIcons();
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      sidebar.classList.toggle('-translate-x-full');
+      backdrop.classList.toggle('hidden');
+    }
+
+    function switchTab(tabName) {
+      ['materi', 'simulator', 'drill', 'quiz'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`nav-${t}`);
+        btn.className = "nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all";
+      });
+
+      document.getElementById(`view-${tabName}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`nav-${tabName}`);
+      activeBtn.className = "nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20";
+
+      const titles = {
+        materi: "Dasar-Dasar Akuntansi & Keuangan Lembaga",
+        simulator: "Lab Interaktif Persamaan Dasar Akuntansi",
+        drill: "Arena Latihan Cepat Debit & Kredit",
+        quiz: "Try Out Evaluasi Akhir Fase E"
+      };
+      document.getElementById('headerTitle').textContent = titles[tabName];
+
+      if (window.innerWidth < 1024) {
+        document.getElementById('sidebar').classList.add('-translate-x-full');
+        document.getElementById('sidebarBackdrop').classList.add('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    function renderChapters(list) {
+      const grid = document.getElementById('chaptersGrid');
+      const sideList = document.getElementById('sidebarChapterList');
+
+      grid.innerHTML = list.map(ch => {
+        const isDone = completedChapters.includes(ch.id);
+        return `
+          <div onclick="openChapter(${ch.id})" class="bento-card cursor-pointer p-5 rounded-3xl bg-white dark:bg-[#111827] border ${isDone ? 'border-emerald-500/40' : 'border-slate-200/90 dark:border-slate-800'} hover:border-emerald-500 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 font-mono text-xs font-bold text-slate-600 dark:text-slate-300">${ch.code}</span>
+                  <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">${ch.tag}</span>
+                </div>
+                ${isDone ? '<span class="text-xs font-bold text-emerald-500 flex items-center gap-1"><i data-lucide="check-circle-2" class="w-4 h-4"></i> Selesai</span>' : '<i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400"></i>'}
+              </div>
+              <h3 class="font-bold text-base sm:text-lg leading-snug mb-2">${ch.title}</h3>
+              <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">${ch.summary}</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+              <span>Baca Materi & Cek Pemahaman</span>
+              <span class="font-mono">+50 XP</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      sideList.innerHTML = chaptersData.map(ch => {
+        const isDone = completedChapters.includes(ch.id);
+        return `
+          <button onclick="switchTab('materi'); openChapter(${ch.id})" class="w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between gap-2 hover:bg-slate-100 dark:hover:bg-slate-800/70 transition-colors ${isDone ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-slate-600 dark:text-slate-400'}">
+            <span class="truncate">${ch.id}. ${ch.title}</span>
+            ${isDone ? '<i data-lucide="check" class="w-3.5 h-3.5 shrink-0"></i>' : ''}
+          </button>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    function filterChapters(keyword) {
+      const q = keyword.toLowerCase().trim();
+      const filtered = chaptersData.filter(c =>
+        c.title.toLowerCase().includes(q) ||
+        c.summary.toLowerCase().includes(q) ||
+        c.tag.toLowerCase().includes(q)
+      );
+      renderChapters(filtered);
+    }
+
+    function openChapter(id) {
+      const ch = chaptersData.find(c => c.id === id);
+      if (!ch) return;
+      activeChapterId = id;
+      const isDone = completedChapters.includes(id);
+
+      const reader = document.getElementById('chapterReader');
+      reader.classList.remove('hidden');
+      reader.innerHTML = `
+        <div class="p-6 sm:p-8 border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/60 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-mono text-xs font-bold text-emerald-500">${ch.code}</span>
+              <span class="text-slate-400">•</span>
+              <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">${ch.tag}</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-extrabold">${ch.title}</h2>
+          </div>
+          <button onclick="closeChapter()" class="px-3.5 py-2 rounded-xl bg-slate-200/70 dark:bg-slate-800 hover:bg-slate-300 text-xs font-bold flex items-center gap-1.5">
+            <i data-lucide="x" class="w-4 h-4"></i> Tutup Materi
+          </button>
+        </div>
+
+        <div class="p-6 sm:p-8 text-sm sm:text-base text-slate-700 dark:text-slate-200">
+          ${ch.content}
+          <div class="mt-8 p-5 rounded-2xl bg-indigo-500/5 border border-indigo-500/20 space-y-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-500 flex items-center gap-1.5">
+              <i data-lucide="help-circle" class="w-4 h-4"></i> Cek Pemahaman Cepat
+            </span>
+            <p class="font-bold text-sm sm:text-base">${ch.miniCheck.q}</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+              ${ch.miniCheck.options.map((opt, i) => `
+                <button onclick="checkMiniQuiz(${ch.id}, ${i}, this)" class="mini-opt text-left p-3 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-500 text-xs sm:text-sm font-medium transition-all">
+                  ${String.fromCharCode(65 + i)}. ${opt}
+                </button>
+              `).join('')}
+            </div>
+            <p id="miniFeedback-${ch.id}" class="text-xs font-bold hidden pt-1"></p>
+          </div>
+        </div>
+
+        <div class="px-6 sm:px-8 py-4 bg-slate-50 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex gap-2">
+            ${id > 1 ? `<button onclick="openChapter(${id - 1})" class="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold hover:bg-slate-100">← Bab Sebelumnya</button>` : ''}
+            ${id < chaptersData.length ? `<button onclick="openChapter(${id + 1})" class="px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold hover:bg-slate-100">Bab Selanjutnya →</button>` : ''}
+          </div>
+          <button onclick="markChapterDone(${ch.id})" class="px-5 py-2.5 rounded-xl ${isDone ? 'bg-slate-200 dark:bg-slate-800 text-emerald-500' : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950'} text-xs font-extrabold flex items-center gap-2 transition-all">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            ${isDone ? 'Bab Sudah Selesai (+50 XP)' : 'Tandai Selesai & Klaim 50 XP'}
+          </button>
+        </div>
+      `;
+      reader.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      lucide.createIcons();
+    }
+
+    function closeChapter() {
+      document.getElementById('chapterReader').classList.add('hidden');
+    }
+
+    function checkMiniQuiz(chId, chosenIdx, btnEl) {
+      const ch = chaptersData.find(c => c.id === chId);
+      const fb = document.getElementById(`miniFeedback-${chId}`);
+      fb.classList.remove('hidden');
+      if (chosenIdx === ch.miniCheck.answer) {
+        fb.textContent = "✅ Tepat sekali! Pemahamanmu sudah sangat baik.";
+        fb.className = "text-xs font-bold text-emerald-500 pt-1";
+        btnEl.classList.add('border-emerald-500', 'bg-emerald-500/10');
+        addXP(15);
+      } else {
+        fb.textContent = "❌ Kurang tepat, coba periksa kembali ringkasan materi di atas!";
+        fb.className = "text-xs font-bold text-rose-500 pt-1";
+        btnEl.classList.add('border-rose-500', 'bg-rose-500/10');
+      }
+    }
+
+    function markChapterDone(id) {
+      if (!completedChapters.includes(id)) {
+        completedChapters.push(id);
+        localStorage.setItem('akuntanpro_completed', JSON.stringify(completedChapters));
+        addXP(50);
+        updateProgressUI();
+        renderChapters(chaptersData);
+        openChapter(id);
+      }
+    }
+
+    function addXP(amount) {
+      xpPoints += amount;
+      localStorage.setItem('akuntanpro_xp', xpPoints.toString());
+      document.getElementById('xpBadge').textContent = `${xpPoints} XP`;
+    }
+
+    function updateProgressUI() {
+      const count = completedChapters.length;
+      const pct = Math.round((count / chaptersData.length) * 100);
+      document.getElementById('sidebarProgressText').textContent = `${count}/${chaptersData.length} Bab`;
+      document.getElementById('sidebarProgressBar').style.width = `${pct}%`;
+      document.getElementById('xpBadge').textContent = `${xpPoints} XP`;
+    }
+
+    function resetProgress() {
+      localStorage.removeItem('akuntanpro_completed');
+      localStorage.removeItem('akuntanpro_xp');
+      completedChapters = [];
+      xpPoints = 0;
+      updateProgressUI();
+      renderChapters(chaptersData);
+      closeChapter();
+    }
+
+    function applySimTx(desc, dKas, dPiutang, dPerlengkapan, dPeralatan, dUtang, dModal, note) {
+      if (simState.kas + dKas < 0) {
+        alert("Saldo Kas tidak mencukupi untuk transaksi pengeluaran tunai ini!");
+        return;
+      }
+      simState.kas += dKas;
+      simState.piutang += dPiutang;
+      simState.perlengkapan += dPerlengkapan;
+      simState.peralatan += dPeralatan;
+      simState.utang += dUtang;
+      simState.modal += dModal;
+      simState.logs.push({ desc, dKas, dPiutang, dPerlengkapan, dPeralatan, dUtang, dModal, note });
+
+      addXP(10);
+      updateSimulatorUI();
+    }
+
+    function resetSimulator() {
+      simState = { kas: 0, piutang: 0, perlengkapan: 0, peralatan: 0, utang: 0, modal: 0, logs: [] };
+      updateSimulatorUI();
+    }
+
+    function updateSimulatorUI() {
+      const totalAset = simState.kas + simState.piutang + simState.perlengkapan + simState.peralatan;
+      const totalPasiva = simState.utang + simState.modal;
+
+      document.getElementById('simTotalAset').textContent = formatRp(totalAset);
+      document.getElementById('simTotalPasiva').textContent = formatRp(totalPasiva);
+      document.getElementById('valKas').textContent = formatRp(simState.kas);
+      document.getElementById('valPiutang').textContent = formatRp(simState.piutang);
+      document.getElementById('valPerlengkapan').textContent = formatRp(simState.perlengkapan);
+      document.getElementById('valPeralatan').textContent = formatRp(simState.peralatan);
+      document.getElementById('valUtang').textContent = formatRp(simState.utang);
+      document.getElementById('valModal').textContent = formatRp(simState.modal);
+
+      document.getElementById('simEquationCheck').textContent = `${formatRp(totalAset)} = ${formatRp(simState.utang)} + ${formatRp(simState.modal)}`;
+      document.getElementById('txCountBadge').textContent = `${simState.logs.length} Transaksi`;
+
+      const tbody = document.getElementById('simTableBody');
+      if (simState.logs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="px-4 py-8 text-center font-sans text-slate-400">Belum ada transaksi. Klik tombol simulasi di atas untuk memulai!</td></tr>`;
+        return;
+      }
+
+      const fmtCell = (v) => v === 0 ? '<span class="text-slate-400">-</span>' : `<span class="${v > 0 ? 'text-emerald-500' : 'text-rose-500'}">${v > 0 ? '+' : ''}${v.toLocaleString('id-ID')}</span>`;
+
+      tbody.innerHTML = simState.logs.map(row => `
+        <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/40">
+          <td class="px-4 py-3 font-sans font-medium text-slate-700 dark:text-slate-200">${row.desc}</td>
+          <td class="px-4 py-3 text-right">${fmtCell(row.dKas)}</td>
+          <td class="px-4 py-3 text-right">${fmtCell(row.dPiutang)}</td>
+          <td class="px-4 py-3 text-right">${fmtCell(row.dPerlengkapan)}</td>
+          <td class="px-4 py-3 text-right">${fmtCell(row.dPeralatan)}</td>
+          <td class="px-4 py-3 text-right">${fmtCell(row.dUtang)}</td>
+          <td class="px-4 py-3 text-right">${fmtCell(row.dModal)}</td>
+          <td class="px-4 py-3 font-sans text-xs text-slate-500 dark:text-slate-400">${row.note}</td>
+        </tr>
+      `).join('');
+    }
+
+    function loadDrill(idx) {
+      const item = drillData[idx % drillData.length];
+      document.getElementById('drillCategory').textContent = `Kategori: ${item.cat}`;
+      document.getElementById('drillQuestion').textContent = item.q;
+      document.getElementById('drillContext').textContent = `Contoh: ${item.ctx}`;
+      document.getElementById('drillCounter').textContent = `${(idx % drillData.length) + 1} / ${drillData.length}`;
+      document.getElementById('drillFeedback').classList.add('hidden');
+      document.getElementById('drillButtons').classList.remove('pointer-events-none', 'opacity-50');
+    }
+
+    function answerDrill(choice) {
+      const item = drillData[drillIdx % drillData.length];
+      const fb = document.getElementById('drillFeedback');
+      const title = document.getElementById('drillFeedbackTitle');
+      const desc = document.getElementById('drillFeedbackDesc');
+
+      document.getElementById('drillButtons').classList.add('pointer-events-none', 'opacity-50');
+      fb.classList.remove('hidden');
+
+      if (choice === item.ans) {
+        drillScore++;
+        drillStreak++;
+        addXP(20);
+        fb.className = "p-4 rounded-2xl text-left text-sm space-y-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300";
+        title.textContent = `🎉 Benar! Posisinya adalah ${item.ans}. (+20 XP)`;
+      } else {
+        drillStreak = 0;
+        fb.className = "p-4 rounded-2xl text-left text-sm space-y-2 bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300";
+        title.textContent = `❌ Kurang tepat! Jawaban yang benar adalah ${item.ans}.`;
+      }
+      desc.textContent = item.exp;
+      document.getElementById('drillScore').textContent = drillScore;
+      document.getElementById('drillStreak').textContent = `${drillStreak} 🔥`;
+    }
+
+    function nextDrill() {
+      drillIdx++;
+      loadDrill(drillIdx);
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quizContainer');
+      document.getElementById('quizProgressPill').textContent = `Soal ${Math.min(quizIdx + 1, quizData.length)} dari ${quizData.length}`;
+
+      if (quizIdx >= quizData.length) {
+        let correct = 0;
+        quizData.forEach((q, i) => { if (quizAnswers[i] === q.ans) correct++; });
+        const score = Math.round((correct / quizData.length) * 100);
+        addXP(score);
+
+        container.innerHTML = `
+          <div class="text-center space-y-4 py-4">
+            <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center mx-auto">
+              <i data-lucide="trophy" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-2xl font-extrabold">Hasil Try Out Fase E</h3>
+            <div class="text-5xl font-black font-mono text-emerald-500">${score}</div>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Kamu menjawab benar <strong>${correct}</strong> dari <strong>${quizData.length}</strong> soal.</p>
+            <button onclick="restartQuiz()" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm">
+              Ulangi Try Out
+            </button>
+          </div>
+          <div class="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-800">
+            <h4 class="font-bold text-sm">Pembahasan Jawaban:</h4>
+            ${quizData.map((q, i) => {
+              const isRight = quizAnswers[i] === q.ans;
+              return `
+                <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border ${isRight ? 'border-emerald-500/30' : 'border-rose-500/30'} text-xs space-y-1">
+                  <p class="font-bold">${i + 1}. ${q.q}</p>
+                  <p class="${isRight ? 'text-emerald-500' : 'text-rose-500'} font-semibold">Jawabanmu: ${q.options[quizAnswers[i]]} ${isRight ? '✓' : '✗'}</p>
+                  ${!isRight ? `<p class="text-emerald-500 font-semibold">Kunci: ${q.options[q.ans]}</p>` : ''}
+                  <p class="text-slate-500 dark:text-slate-400 pt-1">${q.exp}</p>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      const item = quizData[quizIdx];
+      container.innerHTML = `
+        <div class="space-y-5">
+          <p class="text-base sm:text-lg font-bold leading-relaxed">${quizIdx + 1}. ${item.q}</p>
+          <div class="space-y-2.5">
+            ${item.options.map((opt, idx) => `
+              <button onclick="selectQuizOption(${idx})" class="w-full text-left p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-indigo-500 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-indigo-500/5 transition-all flex items-start gap-3 text-sm font-medium">
+                <span class="w-6 h-6 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center font-mono text-xs font-bold shrink-0">${String.fromCharCode(65 + idx)}</span>
+                <span>${opt}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function selectQuizOption(idx) {
+      quizAnswers[quizIdx] = idx;
+      quizIdx++;
+      renderQuiz();
+    }
+
+    function restartQuiz() {
+      quizIdx = 0;
+      quizAnswers = [];
+      renderQuiz();
+    }
+  </script>
+</body>
+</html>
